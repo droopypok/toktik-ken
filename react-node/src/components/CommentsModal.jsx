@@ -159,6 +159,7 @@ const OverLay = (props) => {
     );
     if (res.ok) {
       setReported(reported);
+      props.setShowCommentsModal(false);
     }
     props.handleReportChange(flaggedId, !reported);
     // to update source of truth in parent (homepage)
@@ -267,7 +268,11 @@ const OverLay = (props) => {
                 <p>{likes.length}</p>
               </button>
 
-              <button onClick={() => reportVideo(props.id)}>
+              <button
+                onClick={() => {
+                  reportVideo(props.id);
+                }}
+              >
                 <FlagIcon
                   style={{ fill: reportColor, zIndex: 1000 }}
                 ></FlagIcon>

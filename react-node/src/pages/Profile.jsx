@@ -37,7 +37,6 @@ const Profile = () => {
   });
 
   const [videos, setVideos] = useState([]);
-  const [videoIsLoading, setVideoIsLoading] = useState(false);
 
   const handleReportChange = (videoId) => {
     setVideos(videos.filter((video) => video._id !== videoId));
@@ -71,7 +70,10 @@ const Profile = () => {
   useEffect(() => {
     const checkFollowStatus = followers.map((item) => item.username);
     if (checkFollowStatus.includes(userCtx.username)) {
+      console.log(checkFollowStatus);
       setFollowStatus(true);
+    } else {
+      setFollowStatus(false);
     }
   }, [followers]);
 
@@ -199,7 +201,6 @@ const Profile = () => {
 
   // user uploaded videos
   const getUserVideos = async () => {
-    setVideoIsLoading(true);
     const res = await fetchData(
       "/videos/" + currentUser,
       "POST",
@@ -208,17 +209,19 @@ const Profile = () => {
     );
     if (res.ok) {
       setVideos(res.data);
-      setVideoIsLoading(false);
     } else {
       console.log("an error has occured");
     }
   };
 
   useEffect(() => {
-    console.log("mounted");
+    console.log(followStatus);
+    setFollowStatus(false);
   }, []);
 
   useEffect(() => {
+    setFollowing([]);
+    setFollowers([]);
     getProfileStatInfo();
     getUserVideos();
   }, [currentUser]);
